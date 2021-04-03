@@ -30,6 +30,7 @@ public class Usuario implements Serializable{
 	
 	@NotBlank(message = "Campo obrigatório")
 	@Email(message = "Favor entrar com um email válido")
+	@Column(unique = true)
 	private String login;
 	
 	@Size(min = 6)
