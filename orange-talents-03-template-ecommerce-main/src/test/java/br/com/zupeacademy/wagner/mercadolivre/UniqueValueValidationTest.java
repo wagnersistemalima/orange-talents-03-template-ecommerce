@@ -16,7 +16,7 @@ import org.mockito.Mockito;
 
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 
-// Classe a ser testada, vadidador generico para campos que não podem ter duplicidade
+// Classe a ser testada, validador generico para campos que não podem ter duplicidade
 
 public class UniqueValueValidationTest {
 
@@ -47,8 +47,7 @@ public class UniqueValueValidationTest {
 
 		Mockito.when(manager.createQuery(consultaJpql)).thenReturn(query);
 
-		// configuração do comportamento simulado do resultado da query caso a lista não
-		// esteja vazia, ou seja, existe cadastro
+		// configuração do comportamento simulado do resultado da query 
 
 		Mockito.when(query.getResultList()).thenReturn(list);
 
@@ -80,9 +79,8 @@ public class UniqueValueValidationTest {
 
 		Mockito.when(manager.createQuery(consultaJpql)).thenReturn(query);
 
-		// configuração do comportamento simulado do resultado da query caso a lista 
-		// esteja vazia
-
+		// configuração do comportamento simulado do resultado da query 
+		
 		Mockito.when(query.getResultList()).thenReturn(list);
 
 		// configuração do comportamento simulado do parametro ou campo, com resultado
