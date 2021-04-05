@@ -33,7 +33,7 @@ public class UsuarioController {
 	@Transactional
 	@PostMapping
 	public ResponseEntity<UsuarioResponse> insert(@Valid @RequestBody UsuarioRequest request) {
-		Usuario entity = new Usuario(request.getLogin(), passowordEncoder.encode(request.getSenha()));
+		Usuario entity = new Usuario(request.getEmail(), passowordEncoder.encode(request.getSenha()));
 		manager.persist(entity);
 		return ResponseEntity.ok().body(new UsuarioResponse(entity));
 		

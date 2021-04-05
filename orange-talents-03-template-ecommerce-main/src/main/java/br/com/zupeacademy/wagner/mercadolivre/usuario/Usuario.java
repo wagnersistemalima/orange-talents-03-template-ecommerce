@@ -2,23 +2,33 @@ package br.com.zupeacademy.wagner.mercadolivre.usuario;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import br.com.zupeacademy.wagner.mercadolivre.perfil.Perfil;
+
 // Entidade
 
 @Entity
 @Table(name = "tb_usuario")
-public class Usuario implements Serializable{
+public class Usuario implements UserDetails, Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +41,7 @@ public class Usuario implements Serializable{
 	@NotBlank(message = "Campo obrigatório")
 	@Email(message = "Favor entrar com um email válido")
 	@Column(unique = true)
-	private String login;
+	private String email;
 	
 	@Size(min = 6)
 	@NotBlank(message = "Campo obrigatório")
@@ -39,6 +49,9 @@ public class Usuario implements Serializable{
 	
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant dataCadastro;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	private List<Perfil> perfis = new ArrayList<>();
 	
 	// construtor default
 	
@@ -50,9 +63,9 @@ public class Usuario implements Serializable{
 	// construtor com argumento
 
 	public Usuario(
-			@NotBlank(message = "Campo obrigatório") @Email(message = "Favor entrar com um email válido") String login,
+			@NotBlank(message = "Campo obrigatório") @Email(message = "Favor entrar com um email válido") String email,
 			@Size(min = 6) @NotBlank(message = "Campo obrigatório") String senha) {
-		this.login = login;
+		this.email = email;
 		this.senha = senha;
 	}
 	
@@ -61,9 +74,15 @@ public class Usuario implements Serializable{
 	public Long getId() {
 		return id;
 	}
+	
+	
 
-	public String getLogin() {
-		return login;
+	public List<Perfil> getPerfis() {
+		return perfis;
+	}
+
+	public String getEmail() {
+		return email;
 	}
 
 	public String getSenha() {
@@ -105,6 +124,50 @@ public class Usuario implements Serializable{
 	@PrePersist
 	public void prePersist() {
 		dataCadastro = Instant.now();
+	}
+	
+	// metodos da interface UserDetails
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		
+		return this.perfis;
+	}
+
+	@Override
+	public String getPassword() {
+		
+		return this.senha;
+	}
+
+	@Override
+	public String getUsername() {
+		
+		return this.email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		
+		return true;
 	}
 
 }

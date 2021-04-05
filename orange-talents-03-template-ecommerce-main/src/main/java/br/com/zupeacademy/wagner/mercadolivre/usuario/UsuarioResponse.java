@@ -9,13 +9,13 @@ public class UsuarioResponse implements Serializable{
 	// atributos basicos
 	
 	private Long id;
-	private String login;
+	private String email;
 	
 	// construtor  
 	
 	public UsuarioResponse(Usuario entity) {
 		this.id = entity.getId();
-		this.login = entity.getLogin();
+		this.email = entity.getEmail();
 		
 	}
 
@@ -23,8 +23,9 @@ public class UsuarioResponse implements Serializable{
 		return id;
 	}
 
-	public String getLogin() {
-		return login;
+	public String getEmail() {
+		return email;
 	}
+
 
 }

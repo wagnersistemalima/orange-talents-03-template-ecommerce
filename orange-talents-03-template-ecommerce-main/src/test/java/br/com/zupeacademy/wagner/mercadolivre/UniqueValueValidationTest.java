@@ -54,7 +54,7 @@ public class UniqueValueValidationTest {
 		// configuração do comportamento simulado do parametro ou campo, com resultado
 		// da query
 
-		Mockito.when(query.setParameter("value", novoUsuario.getLogin())).thenReturn(query);
+		Mockito.when(query.setParameter("value", novoUsuario.getEmail())).thenReturn(query);
 
 		// assertivas aqui
 
@@ -86,7 +86,7 @@ public class UniqueValueValidationTest {
 		// configuração do comportamento simulado do parametro ou campo, com resultado
 		// da query
 
-		Mockito.when(query.setParameter("value", novoUsuario.getLogin())).thenReturn(query);
+		Mockito.when(query.setParameter("value", novoUsuario.getEmail())).thenReturn(query);
 
 		// assertivas aqui
 
