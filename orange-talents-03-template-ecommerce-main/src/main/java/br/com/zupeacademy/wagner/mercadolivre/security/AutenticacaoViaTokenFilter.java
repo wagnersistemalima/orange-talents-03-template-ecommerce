@@ -7,9 +7,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.UsuarioRepository;
@@ -17,6 +21,9 @@ import br.com.zupeacademy.wagner.mercadolivre.usuario.UsuarioRepository;
 // classe contendo a logica de pegar o token no cabeçalho da requisição e verificar se ta ok, e autenticar no Spring
 
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
+	
+	@Autowired
+	AutenticacaoService autenticacaoService;
 
 	// atributos basico
 
@@ -53,8 +60,9 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 	private void autenticarCliente(String token) {
 		Long idUsuario = tokenService.getIdUsuario(token);
 		Usuario usuario = repository.findById(idUsuario).get();
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null,
-				usuario.getAuthorities());
+		UserDetails userDetails = autenticacaoService.loadUserByUsername("moderador@email.com");
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+				userDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 	}
