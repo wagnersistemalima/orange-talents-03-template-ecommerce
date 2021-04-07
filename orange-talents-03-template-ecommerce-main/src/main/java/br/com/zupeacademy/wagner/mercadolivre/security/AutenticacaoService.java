@@ -3,14 +3,13 @@ package br.com.zupeacademy.wagner.mercadolivre.security;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import br.com.zupeacademy.wagner.mercadolivre.exceptions.ResourceNotFoundException;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.UsuarioRepository;
 
@@ -30,7 +29,7 @@ public class AutenticacaoService implements UserDetailsService {
 		if (usuario.isPresent()) {
 			return usuario.get();
 		}
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dados invalidos");
+		throw new ResourceNotFoundException("Dados invalidos");
 	}
 	
 	// metodo 2

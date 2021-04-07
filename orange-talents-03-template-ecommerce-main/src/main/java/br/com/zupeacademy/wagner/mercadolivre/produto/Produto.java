@@ -2,12 +2,21 @@ package br.com.zupeacademy.wagner.mercadolivre.produto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +24,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.util.Assert;
 
 import br.com.zupeacademy.wagner.mercadolivre.categoria.Categoria;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
@@ -23,55 +33,68 @@ import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 
 @Entity
 @Table(name = "tb_produto")
-public class Produto implements Serializable{
+public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	// atributos basicos
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank(message = "Campo obrigatorio")
+	@Column(unique = true)
 	private String nome;
-	
+
 	@NotNull
 	@Positive
 	private BigDecimal valor;
-	
+
 	@Positive
 	@NotNull
 	private int quantidade;
-	
+
 	@NotBlank
 	@Length(max = 1000)
 	private String descricao;
 	
+	//associação para CaracteristicaProduto / um produto possui varias caracteristicas
+	
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
+	 private Set<CaracteristicaProduto> caracteristicas = new HashSet<>();
+
 	// associação para categoria e usuario
 	
+	// um produto esta relacionado com uma categoria / Categoria esta realcionado com varios produtos
+
 	@NotNull
 	@Valid
 	@ManyToOne
 	private Categoria categoria;
 	
+	// um produto esta relacionado com um usuario / Usuario esta relacionado com varios produtos
+
 	@Valid
 	@NotNull
 	@ManyToOne
 	private Usuario usuarioLogado;
 	
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant dataRegistro;
+
 	// construtor default
-	
+
 	@Deprecated
 	public Produto() {
-		
+
 	}
-	
+
 	// construtor com argumentos
 
 	public Produto(@NotBlank(message = "Campo obrigatorio") String nome, @NotNull @Positive BigDecimal valor,
 			@Positive @NotNull int quantidade, @NotBlank @Length(max = 1000) String descricao,
-			@NotNull @Valid Categoria categoria,@NotNull @Valid Usuario usuarioLogado) {
+			@NotNull @Valid Categoria categoria, @NotNull @Valid Usuario usuarioLogado, @Valid List<CaracteristicaRequest> caracteristicas) {
 		super();
 		this.nome = nome;
 		this.valor = valor;
@@ -79,21 +102,30 @@ public class Produto implements Serializable{
 		this.descricao = descricao;
 		this.categoria = categoria;
 		this.usuarioLogado = usuarioLogado;
+		this.caracteristicas.addAll(caracteristicas.stream()
+				.map(caracteristica -> caracteristica.toModel(this)).collect(Collectors.toSet()));
+		
+		Assert.isTrue(this.caracteristicas.size() >= 3,
+               "Todo produto precisa ter no mínimo 3 ou mais características");
+    
 	}
-	
+
 	// Getters
 
 	public Long getId() {
 		return id;
 	}
 
+	public Set<CaracteristicaProduto> getCaracteristicas() {
+		return caracteristicas;
+	}
 
 	public Usuario getUsuarioLogado() {
 		return usuarioLogado;
 	}
 
-	public Categoria getCategoriaMae() {
-		return categoria.getCategoriaMae();
+	public Categoria getCategoria() {
+		return categoria;
 	}
 
 	public String getNome() {
@@ -108,17 +140,30 @@ public class Produto implements Serializable{
 		return quantidade;
 	}
 
+
+	public Instant getDataRegistro() {
+		return dataRegistro;
+	}
+
 	public String getDescricao() {
 		return descricao;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade
+				+ ", descricao=" + descricao + ", caracteristicas=" + caracteristicas + ", categoria=" + categoria
+				+ ", usuarioLogado=" + usuarioLogado + "]";
+	}
 	
-	// HashCode & Equals
+	// HashCode & Equals comparando pelo nome
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
 
@@ -131,21 +176,21 @@ public class Produto implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Produto other = (Produto) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (nome == null) {
+			if (other.nome != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade
-				+ ", descricao=" + descricao + ", categoria=" + categoria + ", usuarioLogado=" + usuarioLogado + "]";
+	
+	// metodo auxiliar para sempre que for salvar um usuario no banco, armezanar na
+	// datacadastro o instante atual.
+	
+	@PrePersist
+	public void prePersist() {
+		dataRegistro = Instant.now();
 	}
-
-	
-	
 
 }

@@ -8,12 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.server.ResponseStatusException;
 
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.UsuarioRepository;
@@ -60,9 +57,8 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 	private void autenticarCliente(String token) {
 		Long idUsuario = tokenService.getIdUsuario(token);
 		Usuario usuario = repository.findById(idUsuario).get();
-		UserDetails userDetails = autenticacaoService.loadUserByUsername("moderador@email.com");
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-				userDetails.getAuthorities());
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null,
+				usuario.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 	}

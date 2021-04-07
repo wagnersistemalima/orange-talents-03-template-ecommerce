@@ -58,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests()
 				.antMatchers("/auth").permitAll()
+				.antMatchers(HttpMethod.POST, "/usuarios").hasRole("MODERADOR")
 				.antMatchers(HttpMethod.POST, "/produtos").hasRole("MODERADOR")
 				.anyRequest().authenticated()
 				.and().cors()
@@ -73,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring()
-        .antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**", "/**");
+        .antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**", "/h2-console/**");
 	}
 	
 	// metodo main para criar uma senha criptografada hasch

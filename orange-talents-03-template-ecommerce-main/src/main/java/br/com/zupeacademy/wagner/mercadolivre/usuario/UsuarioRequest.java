@@ -33,13 +33,13 @@ public class UsuarioRequest implements Serializable{
 	public UsuarioRequest(
 			@NotBlank(message = "Campo obrigatório") @Email(message = "Favor entrar com um email válido") String email,
 			@Size(min = 6) @NotBlank(message = "Campo obrigatório") String senha) {
-		this.email = email;
+		this.email = email.toLowerCase();
 		this.senha = senha;
 	}
 
 
 	public String getEmail() {
-		return email;
+		return email.toLowerCase();
 	}
 
 
