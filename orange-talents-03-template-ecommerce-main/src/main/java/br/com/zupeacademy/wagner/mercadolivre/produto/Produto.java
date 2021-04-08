@@ -82,6 +82,11 @@ public class Produto implements Serializable {
 	
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant dataRegistro;
+	
+	// associação com ImagenProduto / um produto pode estar associado com varias imagens
+	
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE) //guando atualizar o produto atualiza junto as imagens
+	private Set<ImagenProduto> imagens = new HashSet<>();
 
 	// construtor default
 
@@ -119,6 +124,11 @@ public class Produto implements Serializable {
 	public Set<CaracteristicaProduto> getCaracteristicas() {
 		return caracteristicas;
 	}
+	
+
+	public Set<ImagenProduto> getImagens() {
+		return imagens;
+	}
 
 	public Usuario getUsuarioLogado() {
 		return usuarioLogado;
@@ -154,7 +164,7 @@ public class Produto implements Serializable {
 	public String toString() {
 		return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade
 				+ ", descricao=" + descricao + ", caracteristicas=" + caracteristicas + ", categoria=" + categoria
-				+ ", usuarioLogado=" + usuarioLogado + "]";
+				+ ", usuarioLogado=" + usuarioLogado + ", dataRegistro=" + dataRegistro + ", imagens=" + imagens + "]";
 	}
 	
 	// HashCode & Equals comparando pelo nome
@@ -191,6 +201,13 @@ public class Produto implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		dataRegistro = Instant.now();
+	}
+	
+	// metodo para associar imagem ao produto
+
+	public void associarImagens(Set<String> listaDeLinks) {
+		Set<ImagenProduto> imagens = listaDeLinks.stream().map(link -> new ImagenProduto(link, this)).collect(Collectors.toSet());
+		this.imagens.addAll(imagens); 
 	}
 
 }

@@ -27,16 +27,27 @@ public class ResourceExceptionHandller {
 		}
 		return ResponseEntity.status(status).body(error);
 	}
-	
-	// metodo para tratamento de erro recurso não encontrado / resposta 400
-		@ExceptionHandler(ResourceNotFoundException.class)
-		public ResponseEntity<ValidationError> entityNotFound(ResourceNotFoundException e, HttpServletRequest request) {
-			HttpStatus status = HttpStatus.BAD_REQUEST;
-			ValidationError error = new ValidationError(Instant.now(), status.value(), "recurso não encontrado",
-					e.getMessage(), request.getRequestURI());
-		
 
-			return ResponseEntity.status(status).body(error);
-		}
+	// metodo para tratamento de erro recurso não encontrado / resposta 400
+	
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<ValidationError> entityNotFound(ResourceNotFoundException e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ValidationError error = new ValidationError(Instant.now(), status.value(), "recurso não encontrado",
+				e.getMessage(), request.getRequestURI());
+
+		return ResponseEntity.status(status).body(error);
+	}
+	
+	// metodo para tratamento de recurso nullo
+	
+	@ExceptionHandler(ResourceNull.class)
+	public ResponseEntity<ValidationError> entityNull(ResourceNull e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ValidationError error = new ValidationError(Instant.now(), status.value(), "recurso nulo",
+				e.getMessage(), request.getRequestURI());
+
+		return ResponseEntity.status(status).body(error);
+	}
 
 }

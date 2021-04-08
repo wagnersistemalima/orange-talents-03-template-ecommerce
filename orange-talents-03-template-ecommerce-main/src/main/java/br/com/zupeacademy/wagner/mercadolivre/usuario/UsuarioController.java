@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 // Controlador Rest, objeto que vai receber as requisiçoes, processar e responder ao cliente
 
-
 @RestController
 @RequestMapping(value = "/usuarios")
 public class UsuarioController {
@@ -32,7 +31,7 @@ public class UsuarioController {
 	
 	@Transactional
 	@PostMapping
-	public ResponseEntity<UsuarioResponse> insert(@Valid @RequestBody UsuarioRequest request) {
+	public ResponseEntity<UsuarioResponse> insert(@Valid  @RequestBody UsuarioRequest request) {
 		Usuario entity = new Usuario(request.getEmail(), passowordEncoder.encode(request.getSenha()));
 		manager.persist(entity);
 		return ResponseEntity.ok().body(new UsuarioResponse(entity));
