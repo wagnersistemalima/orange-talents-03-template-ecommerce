@@ -17,6 +17,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -60,13 +61,23 @@ public class Usuario implements UserDetails, Serializable{
 		
 	}
 	
-	// construtor com argumento
-
+	// construtor com argumentos / apenas para a classe de teste
+	
 	public Usuario(
 			@NotBlank(message = "Campo obrigatório") @Email(message = "Favor entrar com um email válido") String email,
 			@Size(min = 6) @NotBlank(message = "Campo obrigatório") String senha) {
 		this.email = email;
 		this.senha = senha;
+	}
+	
+	// construtor personalizado
+
+	public Usuario(
+			@NotBlank(message = "Campo obrigatório") @Email(message = "Favor entrar com um email válido") String email,
+			@Size(min = 6) @NotBlank(message = "Campo obrigatório") String senha,@NotNull Perfil perfil) {
+		this.email = email;
+		this.senha = senha;
+		this.perfis.add(perfil);
 	}
 	
 	// getters

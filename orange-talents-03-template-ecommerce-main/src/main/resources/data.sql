@@ -1,6 +1,7 @@
 INSERT INTO tb_usuario (email, senha, data_cadastro) VALUES ('moderador@email.com', '$2a$10$bjSu8X6V1enJ8rQj2TIc/OlV8Q1GWm8Sbqo2.IbpltO9nJVdiENLK', TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z');
 
 INSERT INTO Perfil (nome) VALUES ('ROLE_MODERADOR');
+INSERT INTO Perfil (nome) VALUES ('ROLE_CLIENTE');
 
 INSERT INTO tb_usuario_perfis (usuario_id, perfis_id) VALUES (1, 1);
 

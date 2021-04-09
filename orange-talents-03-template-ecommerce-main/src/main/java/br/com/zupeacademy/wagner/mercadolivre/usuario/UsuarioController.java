@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.zupeacademy.wagner.mercadolivre.perfil.Perfil;
+
 // Controlador Rest, objeto que vai receber as requisiçoes, processar e responder ao cliente
 
 @RestController
@@ -32,9 +34,13 @@ public class UsuarioController {
 	@Transactional
 	@PostMapping
 	public ResponseEntity<UsuarioResponse> insert(@Valid  @RequestBody UsuarioRequest request) {
-		Usuario entity = new Usuario(request.getEmail(), passowordEncoder.encode(request.getSenha()));
-		manager.persist(entity);
-		return ResponseEntity.ok().body(new UsuarioResponse(entity));
+		
+		
+		Perfil perfil = manager.find(Perfil.class, request.getIdPerfil());
+		Usuario entity2 = new Usuario(request.getEmail(), passowordEncoder.encode(request.getSenha()), perfil);
+		manager.persist(entity2);
+		
+		return ResponseEntity.ok().body(new UsuarioResponse(entity2));
 		
 	}
 

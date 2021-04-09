@@ -70,5 +70,17 @@ public class ProdutoController {
 		
 		return ResponseEntity.ok().build();
 	}
+	
+	// 3 end point / Usuario cliente logado adiciona opiniao ao produto
+	
+	@Transactional
+	@PostMapping(value = "/{id}/opinioes")
+	public ResponseEntity<?> insertOpiniao(@PathVariable Long id,@Valid @RequestBody OpiniaoProdutoRequest request, @Valid @AuthenticationPrincipal Usuario cliente) {
+		
+		Produto produto = manager.find(Produto.class, id);
+		OpiniaoProduto entity = request.toModel(produto, cliente);
+		manager.persist(entity);
+		return ResponseEntity.ok().build();
+	}
 
 }

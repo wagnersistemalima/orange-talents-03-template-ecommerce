@@ -4,10 +4,13 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import br.com.zupeacademy.wagner.mercadolivre.perfil.Perfil;
+import br.com.zupeacademy.wagner.mercadolivre.validation.ExistsId;
 import br.com.zupeacademy.wagner.mercadolivre.validation.UniqueValue;
 
 // Objeto para trafegar dados entre o cliente e a aplicação
@@ -26,21 +29,26 @@ public class UsuarioRequest implements Serializable {
 	@Size(min = 6, message = "A senha deve ter no minimo 6 caracter")
 	@NotBlank(message = "Campo obrigatório")
 	private String senha;
+	
+	@NotNull
+	@ExistsId(domainClass = Perfil.class, fieldName = "id")
+	private Long idPerfil;
 
 	// construtor argumentos
 
 	@JsonCreator
 	public UsuarioRequest(
 			@NotBlank(message = "Campo obrigatório") @Email(message = "Favor entrar com um email válido")  String email,
-			@Size(min = 6) @NotBlank(message = "Campo obrigatório") String senha) {
+			@Size(min = 6) @NotBlank(message = "Campo obrigatório") String senha,@NotNull Long idPerfil) {
 		
 		// se o email não for nulo, transforma em minusculo, para proteger inserções maliciosas
+		 
 		
 		if (email != null) {
 			this.email = email.toLowerCase();  
 		}
 		this.senha = senha;
-
+		this.idPerfil = idPerfil;
 	}
 
 	public String getEmail() {
@@ -49,6 +57,11 @@ public class UsuarioRequest implements Serializable {
 
 	public String getSenha() {
 		return senha;
+	}
+	
+
+	public Long getIdPerfil() {
+		return idPerfil;
 	}
 
 }
