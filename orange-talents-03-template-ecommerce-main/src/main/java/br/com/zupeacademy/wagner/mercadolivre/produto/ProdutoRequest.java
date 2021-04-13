@@ -105,11 +105,6 @@ public class ProdutoRequest implements Serializable{
 		return new Produto(nome, valor, quantidade, descricao, categoria, usuarioLogado, caracteristicas);
 	}
 
-	@Override
-	public String toString() {
-		return "ProdutoRequest [nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade + ", descricao="
-				+ descricao + ", idCategoria=" + idCategoria + ", caracteristicas=" + caracteristicas + "]";
-	}
 	
 	// metodo para verificar um estado interno da requisição
 

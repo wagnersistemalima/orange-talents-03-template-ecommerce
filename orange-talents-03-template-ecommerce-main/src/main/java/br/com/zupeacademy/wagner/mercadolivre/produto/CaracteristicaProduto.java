@@ -100,11 +100,5 @@ public class CaracteristicaProduto implements Serializable{
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "CaracteristicaProduto [nome=" + nome + ", descricao=" + descricao + "]";
-	}
-
-	
 	
 }

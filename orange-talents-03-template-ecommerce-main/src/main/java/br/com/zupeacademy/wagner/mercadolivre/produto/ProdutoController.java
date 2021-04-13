@@ -18,11 +18,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.zupeacademy.wagner.mercadolivre.compartilhado.Emails;
+import br.com.zupeacademy.wagner.mercadolivre.exceptions.ResourceNotFoundException;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 
 @RestController
 @RequestMapping(value = "/produtos")
 public class ProdutoController {
+	
+	// dependencia para a classe contendo a logica para enviar email
+	
+	@Autowired
+	private Emails emails;
 	
 	// dependencia para o enviador de arquivos
 	
@@ -56,7 +63,7 @@ public class ProdutoController {
 	
 	@Transactional
 	@PostMapping(value = "/{id}/imagens")
-	public ResponseEntity<?> insertImagen(@PathVariable Long id, @Valid ImagenProdutoRequest request) {
+	public ResponseEntity<?> insertImagen(@PathVariable("id") Long id, @Valid ImagenProdutoRequest request) {
 		
 		// 1 passo enviar as imagens para o local de armazenamento fake, e receber os links das imagens
 		
@@ -65,6 +72,10 @@ public class ProdutoController {
 		// 2 passo associar os links com produtos
 		
 		Produto entity = manager.find(Produto.class, id);
+		
+		if (entity == null) {
+			throw new ResourceNotFoundException("O id do produto não foi encontrado");
+		}
 		entity.associarImagens(listaDeLinks);
 		manager.merge(entity);
 		
@@ -75,12 +86,31 @@ public class ProdutoController {
 	
 	@Transactional
 	@PostMapping(value = "/{id}/opinioes")
-	public ResponseEntity<?> insertOpiniao(@PathVariable Long id,@Valid @RequestBody OpiniaoProdutoRequest request, @Valid @AuthenticationPrincipal Usuario cliente) {
+	public ResponseEntity<?> insertOpiniao(@Valid @PathVariable("id") Long id,@Valid @RequestBody OpiniaoProdutoRequest request, @Valid @AuthenticationPrincipal Usuario cliente) {
 		
 		Produto produto = manager.find(Produto.class, id);
 		OpiniaoProduto entity = request.toModel(produto, cliente);
 		manager.persist(entity);
 		return ResponseEntity.ok().build();
 	}
+	
+	// 4º end point / Usuario logado adiciona pergunta sobre o produto / insert / resposta 200
+	
+	@Transactional
+	@PostMapping(value = "/{id}/perguntas")
+	public ResponseEntity<?> insertPergunta(@PathVariable("id") Long id, @RequestBody @Valid PerguntaSobreProdutoRequest request, @Valid @AuthenticationPrincipal Usuario cliente ) {
+		Produto produto = manager.find(Produto.class, id);
+		
+		PerguntaSobreProduto entity = request.toModel(produto, cliente);
+		manager.persist(entity);
+		
+		// logica para enviar a pergunta por email
+		
+		emails.novaPergunta(entity);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	
 
 }

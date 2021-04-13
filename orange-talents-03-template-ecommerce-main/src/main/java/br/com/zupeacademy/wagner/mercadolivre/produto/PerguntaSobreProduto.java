@@ -1,97 +1,74 @@
 package br.com.zupeacademy.wagner.mercadolivre.produto;
 
 import java.io.Serializable;
+import java.time.Instant;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-
-import org.hibernate.validator.constraints.Length;
 
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 
-// Entidade
+// entidade
 
 @Entity
-public class OpiniaoProduto implements Serializable{
+public class PerguntaSobreProduto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	// atributos basicos
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Positive
-	@Min(1)
-	@Max(5)
-	private int nota;
-	
+	private long id;
+
 	@NotBlank
 	private String titulo;
-	
-	@NotBlank
-	@Length(max = 500)
-	private String descricao;
-	
-	// associação com produto / varias opinioes para um produto
-	
+
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant dataRegistro;
+
+	// associação para o produto / varias perguntas esta associada a um produto
+
 	@Valid
 	@NotNull
 	@ManyToOne
 	private Produto produto;
-	
-	// associação com usuario / varias opinioes para um usuario
-	
+
+	// associação para o usuario cliente / varias perguntas pertence a um usuario
+
 	@Valid
 	@NotNull
 	@ManyToOne
 	private Usuario cliente;
-	
+
 	// construtor default
-	
+
 	@Deprecated
-	public OpiniaoProduto() {
-		
+	public PerguntaSobreProduto() {
+
 	}
-	
+
 	// construtor com argumentos
 
-	public OpiniaoProduto(@Positive @Min(1) @Max(5) int nota, @NotBlank String titulo,
-			@NotBlank @Length(max = 500) String descricao, @Valid @NotNull Produto produto,
+	public PerguntaSobreProduto(@NotBlank String titulo, @Valid @NotNull Produto produto,
 			@Valid @NotNull Usuario cliente) {
-		this.nota = nota;
 		this.titulo = titulo;
-		this.descricao = descricao;
 		this.produto = produto;
 		this.cliente = cliente;
 	}
-	
+
 	// getters
-
-	public Long getId() {
-		return id;
-	}
-
-	public int getNota() {
-		return nota;
-	}
 
 	public String getTitulo() {
 		return titulo;
-	}
-
-	public String getDescricao() {
-		return descricao;
 	}
 
 	public Produto getProduto() {
@@ -101,14 +78,21 @@ public class OpiniaoProduto implements Serializable{
 	public Usuario getCliente() {
 		return cliente;
 	}
-	
-	// hashCode & equals comparando pelo titulo e descrição
+
+	public Instant getDataRegistro() {
+		return dataRegistro;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	// hashCode e equals comparando pelo titulo
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
 		result = prime * result + ((titulo == null) ? 0 : titulo.hashCode());
 		return result;
 	}
@@ -121,18 +105,22 @@ public class OpiniaoProduto implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		OpiniaoProduto other = (OpiniaoProduto) obj;
-		if (descricao == null) {
-			if (other.descricao != null)
-				return false;
-		} else if (!descricao.equals(other.descricao))
-			return false;
+		PerguntaSobreProduto other = (PerguntaSobreProduto) obj;
 		if (titulo == null) {
 			if (other.titulo != null)
 				return false;
 		} else if (!titulo.equals(other.titulo))
 			return false;
 		return true;
+	}
+
+
+	// metodo auxiliar para sempre que for salvar uma pergunta sobre o produto no banco, armezanar na
+	// dataRegistro o instante atual.
+
+	@PrePersist
+	public void prePersist() {
+		dataRegistro = Instant.now();
 	}
 
 }

@@ -62,11 +62,6 @@ public class ImagenProduto implements Serializable{
 	public Produto getProduto() {
 		return produto;
 	}
-
-	@Override
-	public String toString() {
-		return "ImagenProduto [id=" + id + ", link=" + link + "]";
-	}
 	
 	// hashCode & equals comparando pelo link e por produto
 

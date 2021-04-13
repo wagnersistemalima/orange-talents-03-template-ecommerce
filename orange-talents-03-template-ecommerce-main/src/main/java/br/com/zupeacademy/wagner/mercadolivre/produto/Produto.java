@@ -158,14 +158,6 @@ public class Produto implements Serializable {
 	public String getDescricao() {
 		return descricao;
 	}
-
-
-	@Override
-	public String toString() {
-		return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade
-				+ ", descricao=" + descricao + ", caracteristicas=" + caracteristicas + ", categoria=" + categoria
-				+ ", usuarioLogado=" + usuarioLogado + ", dataRegistro=" + dataRegistro + ", imagens=" + imagens + "]";
-	}
 	
 	// HashCode & Equals comparando pelo nome
 
@@ -195,7 +187,7 @@ public class Produto implements Serializable {
 	}
 
 	
-	// metodo auxiliar para sempre que for salvar um usuario no banco, armezanar na
+	// metodo auxiliar para sempre que for salvar um produto no banco, armezanar na
 	// datacadastro o instante atual.
 	
 	@PrePersist

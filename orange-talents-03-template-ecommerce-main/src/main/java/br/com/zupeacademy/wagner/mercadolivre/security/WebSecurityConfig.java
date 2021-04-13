@@ -62,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.POST, "/produtos/*/imagens").hasRole("MODERADOR")
 				.antMatchers(HttpMethod.POST, "/produtos").hasRole("MODERADOR")
 				.antMatchers(HttpMethod.POST, "/produtos/*/opinioes").hasRole("CLIENTE")
+				.antMatchers(HttpMethod.POST, "/produtos/*/perguntas").hasRole("CLIENTE")
 				.anyRequest().authenticated()
 				.and().cors()
 				.and().csrf().disable()

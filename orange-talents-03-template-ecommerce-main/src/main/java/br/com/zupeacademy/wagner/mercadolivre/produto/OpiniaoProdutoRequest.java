@@ -11,8 +11,8 @@ import javax.validation.constraints.Positive;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.com.zupeacademy.wagner.mercadolivre.exceptions.ResourceNotFoundException;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
-import br.com.zupeacademy.wagner.mercadolivre.validation.ExistsId;
 
 // objeto para trafegar dados de opiniao do cliente para api
 
@@ -35,18 +35,14 @@ public class OpiniaoProdutoRequest implements Serializable{
 	@Length(max = 500)
 	private String descricao;
 	
-	@NotNull
-	@ExistsId(domainClass = Produto.class, fieldName = "id")
-	private Long idProduto;
 	
 	// construtor com argumentos 
 	
 	public OpiniaoProdutoRequest(@Positive @Min(1) @Max(5) int nota, @NotBlank String titulo,
-			@NotBlank @Length(max = 500) String descricao, @NotNull Long idProduto) {
+			@NotBlank @Length(max = 500) String descricao) {
 		this.nota = nota;
 		this.titulo = titulo;
 		this.descricao = descricao;
-		this.idProduto = idProduto;
 	}
 	
 	// getters
@@ -64,17 +60,12 @@ public class OpiniaoProdutoRequest implements Serializable{
 		return descricao;
 	}
 
-	public Long getIdProduto() {
-		return idProduto;
-	}
-
-	@Override
-	public String toString() {
-		return "OpiniaoProdutoRequest [nota=" + nota + ", titulo=" + titulo + ", descricao=" + descricao
-				+ ", idProduto=" + idProduto + "]";
-	}
 
 	public OpiniaoProduto toModel(@NotNull @Valid Produto produto, @Valid Usuario cliente) {
+		
+		if (produto == null) {
+			throw new ResourceNotFoundException("O id do produto não foi encontrado");
+		}
 		
 		return new  OpiniaoProduto(nota, titulo, descricao, produto, cliente);
 	}
