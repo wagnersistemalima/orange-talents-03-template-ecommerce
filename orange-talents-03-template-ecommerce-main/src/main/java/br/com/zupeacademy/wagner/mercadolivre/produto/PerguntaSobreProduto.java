@@ -123,4 +123,6 @@ public class PerguntaSobreProduto implements Serializable {
 		dataRegistro = Instant.now();
 	}
 
+	
+
 }

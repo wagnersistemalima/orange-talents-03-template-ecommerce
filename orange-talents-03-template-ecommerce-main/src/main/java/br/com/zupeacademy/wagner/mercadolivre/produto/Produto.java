@@ -87,6 +87,17 @@ public class Produto implements Serializable {
 	
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE) //guando atualizar o produto atualiza junto as imagens
 	private Set<ImagenProduto> imagens = new HashSet<>();
+	
+	
+	// associação com as perguntas, vai ser ordenadas / um produto pode estar associado com varias perguntas
+	
+	@OneToMany(mappedBy = "produto")
+	private Set<PerguntaSobreProduto> perguntas = new HashSet<>();
+	
+	// associação com as opinioes / um produto está associado a varias opinioes
+	
+	@OneToMany(mappedBy = "produto")
+	private Set<OpiniaoProduto> opinioes = new HashSet<>();
 
 	// construtor default
 
@@ -119,6 +130,15 @@ public class Produto implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+	
+
+	public Set<OpiniaoProduto> getOpinioes() {
+		return opinioes;
+	}
+
+	public Set<PerguntaSobreProduto> getPerguntas() {
+		return perguntas;
 	}
 
 	public Set<CaracteristicaProduto> getCaracteristicas() {
@@ -201,5 +221,7 @@ public class Produto implements Serializable {
 		Set<ImagenProduto> imagens = listaDeLinks.stream().map(link -> new ImagenProduto(link, this)).collect(Collectors.toSet());
 		this.imagens.addAll(imagens); 
 	}
+	
+	
 
 }
