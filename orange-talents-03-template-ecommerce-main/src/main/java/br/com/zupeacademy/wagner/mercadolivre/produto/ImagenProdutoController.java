@@ -18,7 +18,7 @@ import br.com.zupeacademy.wagner.mercadolivre.exceptions.ResourceNotFoundExcepti
 
 @RestController
 @RequestMapping(value = "/produtos")
-public class ImagenController {
+public class ImagenProdutoController {
 	
 	// objeto para acessar o banco
 	

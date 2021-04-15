@@ -2,6 +2,7 @@ package br.com.zupeacademy.wagner.mercadolivre.produto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import br.com.zupeacademy.wagner.mercadolivre.categoria.Categoria;
+import br.com.zupeacademy.wagner.mercadolivre.exceptions.CaracteristicasDoProdutoIgualException;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 import br.com.zupeacademy.wagner.mercadolivre.validation.ExistsId;
 import br.com.zupeacademy.wagner.mercadolivre.validation.UniqueValue;
@@ -52,7 +54,7 @@ public class ProdutoRequest implements Serializable{
 	
 	@Size(min = 3, message = "minimo treis caracteristicas")
 	@Valid
-	private List<CaracteristicaRequest> caracteristicas;
+	private List<CaracteristicaRequest> caracteristicas = new ArrayList<>();
 	
 	
 	// construtor com argumentos
@@ -65,8 +67,12 @@ public class ProdutoRequest implements Serializable{
 		this.valor = valor;
 		this.quantidade = quantidade;
 		this.descricao = descricao;
-		this.idCategoria = idCategoria;
-		this.caracteristicas = caracteristicas;
+		this.idCategoria = idCategoria;		
+		this.caracteristicas.addAll(caracteristicas);
+		
+		if (temCaracteristicasIguais() == true) {
+			throw new CaracteristicasDoProdutoIgualException("Você está tentando cadastrar um produto com  caracteristicas iguais");
+		}
 	}
 	
 	// getters
@@ -113,12 +119,18 @@ public class ProdutoRequest implements Serializable{
 		
 		for (CaracteristicaRequest caracteristica: this.caracteristicas ) {
 			if (!nomesIguais.add(caracteristica.getNome())) {          // se nao adicionar = true, tem nomes iguais
+				
 				return true;
 			}
 		}
+		
 		return false;                                                  // se adicionar = false, nao tem nomes iguais
 	}
 
-	
+	@Override
+	public String toString() {
+		return "ProdutoRequest [nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade + ", descricao="
+				+ descricao + ", idCategoria=" + idCategoria + ", caracteristicas=" + caracteristicas + "]";
+	}
 	
 }

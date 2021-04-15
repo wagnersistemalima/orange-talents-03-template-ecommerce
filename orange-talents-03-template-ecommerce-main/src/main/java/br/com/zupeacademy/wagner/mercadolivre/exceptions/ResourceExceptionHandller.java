@@ -51,12 +51,23 @@ public class ResourceExceptionHandller {
 		return ResponseEntity.status(status).body(error);
 	}
 	
-	// tratamento de erro da request no estoque
+	// tratamento de erro de validação no estoque
 	
 	@ExceptionHandler(BindException.class)
 	public ResponseEntity<ValidationError> problemaNoEstoque(BindException e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		ValidationError error = new ValidationError(Instant.now(), status.value(), "Problema no estoque",
+		ValidationError error = new ValidationError(Instant.now(), status.value(), "Erro de validação no estoque",
+				e.getMessage(), request.getRequestURI());
+
+		return ResponseEntity.status(status).body(error);
+	}
+	
+	// tratamento erro de validação das caracteristicas do produto
+	
+	@ExceptionHandler(CaracteristicasDoProdutoIgualException.class)
+	public ResponseEntity<ValidationError> problemaNoProdutoComCaracteristicasIguais(CaracteristicasDoProdutoIgualException e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ValidationError error = new ValidationError(Instant.now(), status.value(), "Erro na validação",
 				e.getMessage(), request.getRequestURI());
 
 		return ResponseEntity.status(status).body(error);
