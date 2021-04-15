@@ -51,7 +51,7 @@ public class Produto implements Serializable {
 	@Positive
 	private BigDecimal valor;
 
-	@Positive
+	
 	@NotNull
 	private int quantidade;
 
@@ -109,7 +109,7 @@ public class Produto implements Serializable {
 	// construtor com argumentos
 
 	public Produto(@NotBlank(message = "Campo obrigatorio") String nome, @NotNull @Positive BigDecimal valor,
-			@Positive @NotNull int quantidade, @NotBlank @Length(max = 1000) String descricao,
+			 @NotNull int quantidade, @NotBlank @Length(max = 1000) String descricao,
 			@NotNull @Valid Categoria categoria, @NotNull @Valid Usuario usuarioLogado, @Valid List<CaracteristicaRequest> caracteristicas) {
 		super();
 		this.nome = nome;
@@ -220,6 +220,19 @@ public class Produto implements Serializable {
 	public void associarImagens(Set<String> listaDeLinks) {
 		Set<ImagenProduto> imagens = listaDeLinks.stream().map(link -> new ImagenProduto(link, this)).collect(Collectors.toSet());
 		this.imagens.addAll(imagens); 
+	}
+	
+	// metodo para abater estoque do produto
+
+	public boolean abateDoestoque(@Positive int quantidadeRequest) {
+		// validação
+		
+		if (this.quantidade >= 0 && this.quantidade >= quantidadeRequest) {
+			this.quantidade -= quantidadeRequest;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	

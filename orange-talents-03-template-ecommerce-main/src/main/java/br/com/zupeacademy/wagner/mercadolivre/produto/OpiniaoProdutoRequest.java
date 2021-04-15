@@ -7,7 +7,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -22,8 +21,6 @@ public class OpiniaoProdutoRequest implements Serializable{
 	
 	// atributos basicos
 	
-	
-	@Positive
 	@Min(1)
 	@Max(5)
 	private int nota;
@@ -38,7 +35,7 @@ public class OpiniaoProdutoRequest implements Serializable{
 	
 	// construtor com argumentos 
 	
-	public OpiniaoProdutoRequest(@Positive @Min(1) @Max(5) int nota, @NotBlank String titulo,
+	public OpiniaoProdutoRequest(@Min(1) @Max(5) int nota, @NotBlank String titulo,
 			@NotBlank @Length(max = 500) String descricao) {
 		this.nota = nota;
 		this.titulo = titulo;

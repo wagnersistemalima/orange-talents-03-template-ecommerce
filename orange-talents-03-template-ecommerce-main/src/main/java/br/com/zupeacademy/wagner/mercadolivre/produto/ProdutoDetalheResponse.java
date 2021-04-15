@@ -31,7 +31,7 @@ public class ProdutoDetalheResponse implements Serializable{
 	
 	private String emailvendedor;
 	
-	private int totalDeNotas;
+	private int totalDeNotas; 
 	
 	private double mediaNotas;
 	
@@ -91,10 +91,10 @@ public class ProdutoDetalheResponse implements Serializable{
 		
 		Integer somaDasNotas = entity.getOpinioes().stream().map(opiniao -> opiniao.getNota()).reduce(0, Integer::sum);
 		
-		// media da nota = soma das notas / tamanho da lista
+		// media da nota = soma das notas / totalDeNotas		
 		
-		this.mediaNotas = (double) (somaDasNotas / entity.getOpinioes().size());
-		
+		this.mediaNotas = (somaDasNotas == 0) ? 0 : (double) (somaDasNotas / this.totalDeNotas);
+				
 	}
 	
 	

@@ -13,6 +13,6 @@ public interface Mailer {
 
 	public void send(@NotBlank String body,@NotBlank String titulo,@Email @NotBlank String emailCliente,@NotBlank String from ,@Email @NotBlank String emailDonoProduto);
 		
-		
+	
 
 }

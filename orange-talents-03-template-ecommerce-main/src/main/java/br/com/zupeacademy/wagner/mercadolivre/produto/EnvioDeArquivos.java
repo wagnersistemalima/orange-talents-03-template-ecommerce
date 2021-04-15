@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-// classe contendo a logica de enviar imagens / arquivos
+// classe contendo a logica de enviar imagens para o produto / arquivos
 
 @Component
 public class EnvioDeArquivos{

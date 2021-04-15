@@ -63,6 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.POST, "/produtos").hasRole("VENDEDOR")
 				.antMatchers(HttpMethod.POST, "/produtos/*/opinioes").hasRole("CLIENTE")
 				.antMatchers(HttpMethod.POST, "/produtos/*/perguntas").hasRole("CLIENTE")
+				.antMatchers(HttpMethod.POST, "/produtos/*/compras").hasRole("CLIENTE")
 				.antMatchers(HttpMethod.GET, "/produtos/*").permitAll()
 				.anyRequest().authenticated()
 				.and().cors()
