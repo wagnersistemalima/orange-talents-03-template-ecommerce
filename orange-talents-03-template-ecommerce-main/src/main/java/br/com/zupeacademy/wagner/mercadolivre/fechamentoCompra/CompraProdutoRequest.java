@@ -1,4 +1,4 @@
-package br.com.zupeacademy.wagner.mercadolivre.produto;
+package br.com.zupeacademy.wagner.mercadolivre.fechamentoCompra;
 
 import java.io.Serializable;
 
@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+
 
 // objeto para trafegar dados entre a o cliente e a aplicação, dados da compra
 

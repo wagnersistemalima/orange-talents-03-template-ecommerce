@@ -44,10 +44,5 @@ public class CaracteristicaRequest implements Serializable {
 		return new CaracteristicaProduto(nome, descricao, produto);
 	}
 
-	@Override
-	public String toString() {
-		return "CaracteristicaRequest [nome=" + nome + ", descricao=" + descricao + "]";
-	}
-	
 
 }

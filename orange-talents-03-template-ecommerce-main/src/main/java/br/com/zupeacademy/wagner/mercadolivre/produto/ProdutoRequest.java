@@ -127,10 +127,5 @@ public class ProdutoRequest implements Serializable{
 		return false;                                                  // se adicionar = false, nao tem nomes iguais
 	}
 
-	@Override
-	public String toString() {
-		return "ProdutoRequest [nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade + ", descricao="
-				+ descricao + ", idCategoria=" + idCategoria + ", caracteristicas=" + caracteristicas + "]";
-	}
-	
+
 }

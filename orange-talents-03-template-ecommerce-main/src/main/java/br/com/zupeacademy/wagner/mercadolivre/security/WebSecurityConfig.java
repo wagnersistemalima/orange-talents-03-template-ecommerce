@@ -58,13 +58,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests()
 				.antMatchers("/auth").permitAll()
-				.antMatchers(HttpMethod.POST, "/usuarios").hasRole("ADMINISTRADOR")
-				.antMatchers(HttpMethod.POST, "/produtos/*/imagens").hasRole("VENDEDOR")
-				.antMatchers(HttpMethod.POST, "/produtos").hasRole("VENDEDOR")
-				.antMatchers(HttpMethod.POST, "/produtos/*/opinioes").hasRole("CLIENTE")
-				.antMatchers(HttpMethod.POST, "/produtos/*/perguntas").hasRole("CLIENTE")
-				.antMatchers(HttpMethod.POST, "/produtos/*/compras").hasRole("CLIENTE")
-				.antMatchers(HttpMethod.GET, "/produtos/*").permitAll()
+				.antMatchers(HttpMethod.POST, "/usuarios").hasRole("ADMINISTRADOR")       // inserir usuarios
+				
+				
+				.antMatchers(HttpMethod.POST, "/produtos/*/imagens").hasRole("VENDEDOR")      // inserir imagem produto
+				.antMatchers(HttpMethod.POST, "/produtos").hasRole("VENDEDOR")                 // inserir produto
+				.antMatchers(HttpMethod.GET, "/produtos/*").hasRole("VENDEDOR")               // mostrar detalhes do produto
+				
+				
+				.antMatchers(HttpMethod.POST, "/produtos/*/opinioes").hasRole("CLIENTE")       // adicionar opiniao ao produto
+				.antMatchers(HttpMethod.POST, "/produtos/*/perguntas").hasRole("CLIENTE")         // adicionar pergunta ao produto
+				.antMatchers(HttpMethod.POST, "/produtos/*/compras").hasRole("CLIENTE")        // fazer uma compra
+				.antMatchers(HttpMethod.GET, "/produtos/*").hasRole("CLIENTE")                   // ver detalhes do produto
+				
+				
+				.antMatchers(HttpMethod.POST, "/produtos/retorno-pagseguro/*").hasRole("PAGSEGURO")  // retorno do gateway pagamento PagSeguro
+				
+				.antMatchers(HttpMethod.POST, "/produtos/retorno-paypal/*").hasRole("PAYPAL")      // retorno do gateway pagamento  PayPal
+				
+				
+				.antMatchers(HttpMethod.POST, "/notas-fiscais").permitAll()              // sistema externo mokado nota fiscal   
+				
+				.antMatchers(HttpMethod.POST, "/ranking").permitAll()                  // sistema externo mokado ranking
+				
+				
+				
 				.anyRequest().authenticated()
 				.and().cors()
 				.and().csrf().disable()

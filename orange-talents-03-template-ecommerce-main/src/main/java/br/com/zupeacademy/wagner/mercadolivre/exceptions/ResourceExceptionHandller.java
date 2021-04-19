@@ -56,8 +56,12 @@ public class ResourceExceptionHandller {
 	@ExceptionHandler(BindException.class)
 	public ResponseEntity<ValidationError> problemaNoEstoque(BindException e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		ValidationError error = new ValidationError(Instant.now(), status.value(), "Erro de validação no estoque",
+		ValidationError error = new ValidationError(Instant.now(), status.value(), "Validation exception!",
 				e.getMessage(), request.getRequestURI());
+		
+		for (FieldError f : e.getBindingResult().getFieldErrors()) {
+			error.addErro(f.getField(), f.getDefaultMessage());
+		}
 
 		return ResponseEntity.status(status).body(error);
 	}
@@ -68,6 +72,15 @@ public class ResourceExceptionHandller {
 	public ResponseEntity<ValidationError> problemaNoProdutoComCaracteristicasIguais(CaracteristicasDoProdutoIgualException e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		ValidationError error = new ValidationError(Instant.now(), status.value(), "Erro na validação",
+				e.getMessage(), request.getRequestURI());
+
+		return ResponseEntity.status(status).body(error);
+	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ValidationError> validatiom(IllegalArgumentException e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ValidationError error = new ValidationError(Instant.now(), status.value(), "Validation exception!",
 				e.getMessage(), request.getRequestURI());
 
 		return ResponseEntity.status(status).body(error);

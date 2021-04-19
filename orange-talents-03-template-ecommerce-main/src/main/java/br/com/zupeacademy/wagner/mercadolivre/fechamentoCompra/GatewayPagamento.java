@@ -1,4 +1,4 @@
-package br.com.zupeacademy.wagner.mercadolivre.produto;
+package br.com.zupeacademy.wagner.mercadolivre.fechamentoCompra;
 
 public enum GatewayPagamento {
 	

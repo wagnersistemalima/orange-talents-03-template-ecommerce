@@ -2,16 +2,22 @@ INSERT INTO tb_usuario (email, senha, data_cadastro) VALUES ('vendedor1@gmail.co
 INSERT INTO tb_usuario (email, senha, data_cadastro) VALUES ('marina@gmail.com', '$2a$10$bjSu8X6V1enJ8rQj2TIc/OlV8Q1GWm8Sbqo2.IbpltO9nJVdiENLK', TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z');
 INSERT INTO tb_usuario (email, senha, data_cadastro) VALUES ('wagner@gmail.com', '$2a$10$bjSu8X6V1enJ8rQj2TIc/OlV8Q1GWm8Sbqo2.IbpltO9nJVdiENLK', TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z');
 INSERT INTO tb_usuario (email, senha, data_cadastro) VALUES ('administrador@gmail.com', '$2a$10$bjSu8X6V1enJ8rQj2TIc/OlV8Q1GWm8Sbqo2.IbpltO9nJVdiENLK', TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z');
+INSERT INTO tb_usuario (email, senha, data_cadastro) VALUES ('pagseguro@gmail.com', '$2a$10$bjSu8X6V1enJ8rQj2TIc/OlV8Q1GWm8Sbqo2.IbpltO9nJVdiENLK', TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z');
+INSERT INTO tb_usuario (email, senha, data_cadastro) VALUES ('paypal@gmail.com', '$2a$10$bjSu8X6V1enJ8rQj2TIc/OlV8Q1GWm8Sbqo2.IbpltO9nJVdiENLK', TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z');
 
 INSERT INTO Perfil (nome) VALUES ('ROLE_VENDEDOR');
 INSERT INTO Perfil (nome) VALUES ('ROLE_CLIENTE');
 INSERT INTO Perfil (nome) VALUES ('ROLE_ADMINISTRADOR');
+INSERT INTO Perfil (nome) VALUES ('ROLE_PAGSEGURO');
+INSERT INTO Perfil (nome) VALUES ('ROLE_PAYPAL');
 
 
 INSERT INTO tb_usuario_perfis (usuario_id, perfis_id) VALUES (1, 1);
 INSERT INTO tb_usuario_perfis (usuario_id, perfis_id) VALUES (2, 2);
 INSERT INTO tb_usuario_perfis (usuario_id, perfis_id) VALUES (3, 2);
 INSERT INTO tb_usuario_perfis (usuario_id, perfis_id) VALUES (4, 3);
+INSERT INTO tb_usuario_perfis (usuario_id, perfis_id) VALUES (5, 4);
+INSERT INTO tb_usuario_perfis (usuario_id, perfis_id) VALUES (6, 5);
 
 INSERT INTO tb_categoria (nome) VALUES ('Tecnologia');
 INSERT INTO tb_categoria (nome) VALUES ('Livros');
@@ -36,4 +42,5 @@ INSERT INTO pergunta_sobre_produto (data_registro, titulo, cliente_id, produto_i
 
 INSERT INTO imagen_produto (link, produto_id) VALUES ('http://bucket.io/acobompreco.jpg', 1);
 INSERT INTO imagen_produto (link, produto_id) VALUES ('http://bucket.io/acobompreco124.jpg', 1);
+
 

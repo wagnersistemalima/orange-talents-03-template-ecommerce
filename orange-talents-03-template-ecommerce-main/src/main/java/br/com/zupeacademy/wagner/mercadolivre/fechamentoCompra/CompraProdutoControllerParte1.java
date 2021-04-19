@@ -1,4 +1,4 @@
-package br.com.zupeacademy.wagner.mercadolivre.produto;
+package br.com.zupeacademy.wagner.mercadolivre.fechamentoCompra;
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
@@ -15,15 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.zupeacademy.wagner.mercadolivre.compartilhado.Emails;
+
 import br.com.zupeacademy.wagner.mercadolivre.exceptions.ResourceNotFoundException;
+import br.com.zupeacademy.wagner.mercadolivre.outrosSistemas.Emails;
+import br.com.zupeacademy.wagner.mercadolivre.produto.Produto;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 
 // Classe responsavel por receber as requisiçoes das compras dos produtos, processar e responder ao cliente
 
 @RestController
 @RequestMapping(value = "/produtos")
-public class CompraController {
+public class CompraProdutoControllerParte1 {
 
 	// dependencia para a classe contendo a logica para enviar email
 
@@ -69,7 +71,7 @@ public class CompraController {
 
 			// se o pagamento escolhido pelo cliente for pag-seguro
 
-			if (gateweyPagamento.equals(GatewayPagamento.PAG_SEGURO)) { 
+			if (gateweyPagamento.equals(GatewayPagamento.PAG_SEGURO)) {                    //1
 				String url_Pag_Seguro = UriComponentsBuilder.fromPath("/retorno-pagseguro/{id}")
 						.buildAndExpand(entity.getId()).toString();
 				return ResponseEntity.ok("pagseguro.com/" + entity.getId() + "?redirectUrl=" + url_Pag_Seguro);

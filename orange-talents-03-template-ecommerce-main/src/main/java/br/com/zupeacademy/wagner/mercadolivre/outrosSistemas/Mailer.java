@@ -1,4 +1,4 @@
-package br.com.zupeacademy.wagner.mercadolivre.compartilhado;
+package br.com.zupeacademy.wagner.mercadolivre.outrosSistemas;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

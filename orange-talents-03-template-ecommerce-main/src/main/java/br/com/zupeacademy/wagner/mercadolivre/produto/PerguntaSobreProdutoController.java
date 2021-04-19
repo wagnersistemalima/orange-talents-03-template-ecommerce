@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.zupeacademy.wagner.mercadolivre.compartilhado.Emails;
+import br.com.zupeacademy.wagner.mercadolivre.outrosSistemas.Emails;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 
 @RestController

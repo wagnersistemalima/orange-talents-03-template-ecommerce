@@ -1,4 +1,4 @@
-package br.com.zupeacademy.wagner.mercadolivre.compartilhado;
+package br.com.zupeacademy.wagner.mercadolivre.outrosSistemas;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.zupeacademy.wagner.mercadolivre.produto.CompraProduto;
+import br.com.zupeacademy.wagner.mercadolivre.fechamentoCompra.CompraProduto;
 import br.com.zupeacademy.wagner.mercadolivre.produto.PerguntaSobreProduto;
 
 // classe contendo a logica de enviar email
@@ -35,7 +35,14 @@ public class Emails {
 	// metodo para enviar um email para o vendedor do produto, informando que o cliente quer comprar o produto
 	
 	public void novaCompra(CompraProduto compra) {
-		mailer.send("<html>...<html>", "Compra de produto", compra.getCliente().getEmail(), "novaCompraNossoMercadoLivre", compra.getProduto().getUsuarioLogado().getEmail());
+		mailer.send("<html>...<html>", "Intenção da Compra de produto", compra.getCliente().getEmail(), "novaCompraNossoMercadoLivre", compra.getProduto().getUsuarioLogado().getEmail());
+	}
+	
+	// metodo para enviar email ao cliente, avisando que sua compra foi concluida com sucesso
+
+	public void compraFinalizadaComSucesso(@NotNull @Valid CompraProduto compra) {
+		mailer.send("<html>...<html>", "Compra finalizada com sucesso", compra.getCliente().getEmail(), "novaCompraNossoMercadoLivre", compra.getProduto().getNome());
+		
 	}
 
 }

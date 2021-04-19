@@ -1,17 +1,27 @@
-package br.com.zupeacademy.wagner.mercadolivre.produto;
+package br.com.zupeacademy.wagner.mercadolivre.fechamentoCompra;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import org.springframework.util.Assert;
+
+
+import br.com.zupeacademy.wagner.mercadolivre.produto.Produto;
 import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 
 // entidade
@@ -20,6 +30,9 @@ import br.com.zupeacademy.wagner.mercadolivre.usuario.Usuario;
 public class CompraProduto implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
+	@Transient                                               // JPA vai ignorar o atributo no banco
+	private boolean compraFinalizadaComSucesso = false;
 	
 	// atributos basicos
 	
@@ -48,6 +61,17 @@ public class CompraProduto implements Serializable{
 	@ManyToOne
 	@Valid
 	private Usuario cliente;
+	
+	// associação com a transação / uma compra esta relacionada com varias transaçoes / guando atualizar a compra ,
+	// mergei as transaçoes
+	
+	
+	// MERGE – disparado toda vez que uma alteração é executada em uma entity. Essa alteração pode acontecer
+	// ao final de uma transação com a qual uma managed Entity foi alterada, ou pelo comando entityManager
+	
+	@OneToMany(mappedBy = "compra", cascade = CascadeType.MERGE)
+	private Set<Transacao> transacoes = new HashSet<>();
+
 	
 	// construtor default
 	
@@ -79,7 +103,6 @@ public class CompraProduto implements Serializable{
 	public Produto getProduto() {
 		return produto;
 	}
-	
 	
 
 	public GatewayPagamento getGateway() {
@@ -116,6 +139,39 @@ public class CompraProduto implements Serializable{
 			return false;
 		return true;
 	}
+	
+	// metodo com a logica de adicionar a transação
 
-
+	public void adicionaTransacao(@Valid RetornoGatewayPagamento request) {
+		
+		Transacao novaTransacao = request.toTransacao(this);   // transforma a request em entidade
+		
+		// não suportamos que duas transaçoes idTransação iguais sejam adicionada a compra
+		
+		
+		Assert.isTrue(!this.transacoes.contains(novaTransacao), "Já existe uma transação igual a essa processada ");
+		
+		// para cada id da compra só pode ter um status com sucesso 
+		
+		Set<Transacao> transacoesConcluidaComSucesso = this.transacoes.stream()
+				.filter(Transacao :: concluidaComSucesso)
+				.collect(Collectors.toSet());
+		
+		// validação 
+		
+		Assert.isTrue(transacoesConcluidaComSucesso.isEmpty(), "Essa compra já foi concluida com sucesso");
+		Assert.isTrue(transacoesConcluidaComSucesso.size() <= 1, "Falha no sistema!");
+		
+		// se passar das validaçoes adiciona a transação
+		
+		
+		this.transacoes.add(request.toTransacao(this));
+		this.compraFinalizadaComSucesso = true;
+		
+	}
+	
+	public boolean isCompraFinalizadaComSucesso() {
+		return compraFinalizadaComSucesso;
+	}
+	
 }

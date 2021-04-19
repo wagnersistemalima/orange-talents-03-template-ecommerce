@@ -1,4 +1,4 @@
-package br.com.zupeacademy.wagner.mercadolivre.compartilhado;
+package br.com.zupeacademy.wagner.mercadolivre.outrosSistemas;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
