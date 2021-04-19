@@ -28,7 +28,7 @@ public class AutenticacaoRequest implements Serializable {
 		this.senha = senha;
 	}
 
-	public String getNome() {
+	public String getEmail() {
 		return email;
 	}
 
