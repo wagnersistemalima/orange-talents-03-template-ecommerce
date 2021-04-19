@@ -3,6 +3,7 @@ package br.com.zupeacademy.wagner.mercadolivre;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
 @SpringBootApplication
 public class MercadoLivreApplication {
 
